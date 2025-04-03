@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { Home as HomeIcon } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -8,6 +8,15 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export const handle = {
+  title: "Home",
+  icon: HomeIcon,
+};
+
 export default function Home() {
-  return <Welcome />;
+  return (
+    <div className="flex h-fit justify-center content-center">
+      <div>開始ページ</div>
+    </div>
+  );
 }

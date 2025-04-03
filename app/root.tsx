@@ -5,10 +5,15 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useMatches,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
+import { AppSidebar } from "./components/app-sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
+import { AppBreadcrumb } from "./components/app-breadcrumb";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -25,7 +30,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,7 +38,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="w-full">
+            <div className="flex justify-between pr-5 py-3 border-b">
+              <div className="flex gap-4">
+                <SidebarTrigger className="cursor-pointer" />
+                <div>Sales Management System INFINITY</div>
+              </div>
+              <Avatar>
+                <AvatarImage src="" alt="infinity" />
+                <AvatarFallback>IN</AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="p-3">
+              <AppBreadcrumb />
+              {children}
+            </div>
+          </main>
+        </SidebarProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
