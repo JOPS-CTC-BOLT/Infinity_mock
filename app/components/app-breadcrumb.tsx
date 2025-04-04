@@ -1,4 +1,4 @@
-import { NavLink, useMatches } from "react-router";
+import { NavLink, useMatches } from "@remix-run/react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,7 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
-import { handle as home_handle } from "app/routes/home";
+import { handle as home_handle } from "app/routes/_index";
 
 export function AppBreadcrumb() {
   const matchs = useMatches();

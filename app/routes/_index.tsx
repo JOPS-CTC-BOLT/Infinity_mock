@@ -1,7 +1,7 @@
-import type { Route } from "./+types/home";
+import type { MetaFunction } from "@remix-run/node";
 import { Home as HomeIcon } from "lucide-react";
 
-export function meta({}: Route.MetaArgs) {
+export const meta: MetaFunction = () => {
   return [
     { title: "New React Router App" },
     { name: "description", content: "Welcome to React Router!" },

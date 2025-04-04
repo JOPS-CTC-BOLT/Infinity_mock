@@ -1,15 +1,15 @@
 import { Input } from "~/components/ui/input";
-import type { Route } from "./+types/order";
+import type { MetaFunction } from "@remix-run/node";
 import { Inbox, Pen, Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { NavLink } from "react-router";
+import { NavLink } from "@remix-run/react";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-export function meta({}: Route.MetaArgs) {
+export const meta: MetaFunction = () => {
   return [
     { title: "order" },
     { name: "description", content: "Welcome to React Router!" },
@@ -21,7 +21,7 @@ export const handle = {
   icon: Inbox,
 };
 
-export async function clientLoader({}: Route.ClientLoaderArgs) {
+export default function order() {
   const rows = [
     {
       order_no: "P-0101",
@@ -39,10 +39,6 @@ export async function clientLoader({}: Route.ClientLoaderArgs) {
     },
   ];
 
-  return { rows };
-}
-
-export default function order({ loaderData }: Route.ComponentProps) {
   const colDefs: ColDef = [
     {
       field: "order_no",
@@ -114,7 +110,7 @@ export default function order({ loaderData }: Route.ComponentProps) {
       </div>
       <div className="pt-6 h-[500px]">
         <AgGridReact
-          rowData={loaderData.rows}
+          rowData={rows}
           columnDefs={colDefs}
           defaultColDef={{ floatingFilter: true, filter: true }}
         />
