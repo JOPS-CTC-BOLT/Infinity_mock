@@ -71,6 +71,7 @@ export default function order() {
     const updateDate = randomDate(new Date(2025, 0, 1), new Date(2025, 2, 31));
 
     return {
+      id: i + 1,
       order_no: orderNo,
       received_no: receivedNo,
       order_type: orderTypes[Math.floor(Math.random() * orderTypes.length)],
@@ -96,6 +97,9 @@ export default function order() {
       headerName: "発注番号",
       filter: true,
       width: 120,
+      cellRenderer: (params: any) => {
+        return <NavLink to={`./${params.data.id}`}>{params.value}</NavLink>;
+      },
     },
     {
       field: "received_no",
