@@ -1,11 +1,12 @@
 import { Input } from "~/components/ui/input";
 import type { MetaFunction } from "@remix-run/node";
-import { Inbox, Pen, Upload } from "lucide-react";
+import { Pen, Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { NavLink } from "@remix-run/react";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
+import { handle as index_handle } from "app/routes/order";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -171,7 +172,7 @@ export default function order() {
 
   return (
     <div>
-      <div className="py-6 text-4xl font-bold">{handle.title}</div>
+      <div className="py-6 text-4xl font-bold">{index_handle.title}</div>
       <div className="flex justify-between">
         <Input className="w-2xl" placeholder="検索キーワードを入力"></Input>
         <div className="flex gap-3">
