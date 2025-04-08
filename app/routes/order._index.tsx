@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input";
 import type { MetaFunction } from "@remix-run/node";
-import { Loader, Pen, Upload } from "lucide-react";
+import { CalendarIcon, Filter, Loader, Pen, Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { NavLink } from "@remix-run/react";
 import type { ColDef, GridReadyEvent, IDatasource } from "ag-grid-community";
@@ -21,6 +21,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+import { Checkbox } from "~/components/ui/checkbox";
+import { cn } from "~/lib/utils";
+import { format } from "date-fns";
+import { Calendar } from "~/components/ui/calendar";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -37,6 +46,18 @@ const PAGE_SIZE = 100;
 
 export default function Order() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [orderStatuses, setOrderStatuses] = useState({
+    unordered: false,
+    pending: false,
+    ordered: false,
+  });
+  const [orderPaperStatuses, setOrderPaperStatuses] = useState({
+    unissued: false,
+    issued: false,
+  });
 
   // Generate sample record
   const generateRow = (index: number) => {
@@ -205,18 +226,43 @@ export default function Order() {
   ];
 
   const onGridReady = useCallback((params: GridReadyEvent) => {
-    // 初期データのロード
     const dataSource: IDatasource = {
       rowCount: undefined,
       getRows: (params) => {
-        // To make the demo look real, wait for 500ms before returning
-        setTimeout(function () {
-          // take a slice of the total rows
-          const rowsThisPage = Array.from({ length: PAGE_SIZE }, (_, i) =>
-            generateRow(params.startRow + i)
+        // サンプルデータの生成
+        let rowData = Array.from({ length: 1000 }, (_, i) => generateRow(i));
+
+        // ソート処理
+        if (params.sortModel && params.sortModel.length > 0) {
+          const { colId, sort } = params.sortModel[0];
+          rowData.sort((a: any, b: any) => {
+            if (sort === 'asc') {
+              return a[colId] > b[colId] ? 1 : -1;
+            }
+            return a[colId] < b[colId] ? 1 : -1;
+          });
+        }
+
+        // フィルター処理
+        if (params.filterModel) {
+          Object.keys(params.filterModel).forEach((key) => {
+            const filter = params.filterModel[key];
+            if (filter.type === 'contains') {
+              rowData = rowData.filter((row: any) => 
+                row[key].toString().toLowerCase().includes(filter.filter.toLowerCase())
           );
-          // call the success callback
-          params.successCallback(rowsThisPage, -1);
+            }
+          });
+        }
+
+        // ページネーション処理
+        const startRow = params.startRow;
+        const endRow = Math.min(params.endRow, rowData.length);
+        const rowsThisPage = rowData.slice(startRow, endRow);
+
+        // 遅延を入れてリアルなAPIコールをシミュレート
+        setTimeout(() => {
+          params.successCallback(rowsThisPage, rowData.length);
         }, 500);
       },
     };
@@ -226,7 +272,172 @@ export default function Order() {
   return (
     <div className="flex flex-col">
       <div className="flex justify-between mb-6">
-        <Input className="w-2xl" placeholder="検索キーワードを入力"></Input>
+        <div className="flex gap-2">
+          <Input className="w-96" placeholder="検索キーワードを入力"></Input>
+          <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="px-3">
+                <Filter className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-96">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">含む</h4>
+                  <Input />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">含まない</h4>
+                  <Input />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">期間</h4>
+                  <div className="flex gap-2">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !startDate && "text-muted-foreground"
+                          )}
+                        >
+                          {startDate ? (
+                            format(startDate, "yyyy/MM/dd")
+                          ) : (
+                            <span>開始日を選択</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={startDate}
+                          onSelect={setStartDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <span>~</span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !endDate && "text-muted-foreground"
+                          )}
+                        >
+                          {endDate ? (
+                            format(endDate, "yyyy/MM/dd")
+                          ) : (
+                            <span>終了日を選択</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={endDate}
+                          onSelect={setEndDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">発注ステータス</h4>
+                  <div className="flex gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="unordered"
+                        checked={orderStatuses.unordered}
+                        onCheckedChange={(checked) =>
+                          setOrderStatuses({ ...orderStatuses, unordered: checked as boolean })
+                        }
+                      />
+                      <label
+                        htmlFor="unordered"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        未発注
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="pending"
+                        checked={orderStatuses.pending}
+                        onCheckedChange={(checked) =>
+                          setOrderStatuses({ ...orderStatuses, pending: checked as boolean })
+                        }
+                      />
+                      <label
+                        htmlFor="pending"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        承認待ち
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="ordered"
+                        checked={orderStatuses.ordered}
+                        onCheckedChange={(checked) =>
+                          setOrderStatuses({ ...orderStatuses, ordered: checked as boolean })
+                        }
+                      />
+                      <label
+                        htmlFor="ordered"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        発注済
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="font-medium leading-none">発注書発行状態</h4>
+                  <div className="flex gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="unissued"
+                        checked={orderPaperStatuses.unissued}
+                        onCheckedChange={(checked) =>
+                          setOrderPaperStatuses({ ...orderPaperStatuses, unissued: checked as boolean })
+                        }
+                      />
+                      <label
+                        htmlFor="unissued"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        未発行
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="issued"
+                        checked={orderPaperStatuses.issued}
+                        onCheckedChange={(checked) =>
+                          setOrderPaperStatuses({ ...orderPaperStatuses, issued: checked as boolean })
+                        }
+                      />
+                      <label
+                        htmlFor="issued"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        発行済
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <Button>検索</Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
         <div className="flex gap-3">
           <Button onClick={() => setIsExportModalOpen(true)}>
             <Upload />
@@ -241,7 +452,7 @@ export default function Order() {
         </div>
       </div>
       <div className="flex grow">
-        <div className="w-full h-96">
+        <div className="w-full h-[400px]">
           <AgGridReact
             columnDefs={colDefs}
             defaultColDef={{
@@ -259,6 +470,9 @@ export default function Order() {
             maxBlocksInCache={10}
             onGridReady={onGridReady}
             domLayout="normal"
+            rowHeight={40}
+            headerHeight={40}
+            floatingFiltersHeight={40}
           />
         </div>
       </div>
