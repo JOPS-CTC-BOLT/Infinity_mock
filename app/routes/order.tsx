@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Inbox } from "lucide-react";
-import { Outlet } from "@remix-run/react";
+import { Outlet, useMatches } from "@remix-run/react";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -17,6 +17,18 @@ export const handle = {
   icon: Inbox,
 };
 
-export default function order() {
-  return <Outlet />;
+export default function Order() {
+  const matches = useMatches();
+
+  return (
+    <div className="size-full">
+      <div className="py-6 text-4xl font-bold">
+        {
+          matches.filter((m) => !!m.handle && !!m.handle.title).at(-1)?.handle
+            .title
+        }
+      </div>
+      <Outlet />
+    </div>
+  );
 }

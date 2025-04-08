@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import OrderNew from "./order.new";
 import { Inbox } from "lucide-react";
+import OrderEditor from "~/components/app-order-editor/index";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,5 +15,5 @@ export const handle = {
 };
 
 export default function OrderEdit() {
-  return <OrderNew />;
+  return <OrderEditor />;
 }

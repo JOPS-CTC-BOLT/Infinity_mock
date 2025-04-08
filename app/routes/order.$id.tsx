@@ -17,6 +17,6 @@ export const handle = {
   icon: Inbox,
 };
 
-export default function order() {
+export default function OrderDetail() {
   return <Outlet />;
 }
