@@ -12,6 +12,7 @@ import { SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import { AppBreadcrumb } from "./components/app-breadcrumb";
+import { Toaster } from "./components/ui/sonner";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -53,6 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <AppBreadcrumb />
               {children}
             </div>
+            <Toaster position="bottom-right" expand={true} />
           </main>
         </SidebarProvider>
         <ScrollRestoration />

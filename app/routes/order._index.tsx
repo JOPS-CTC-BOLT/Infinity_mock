@@ -6,20 +6,19 @@ import { NavLink } from "@remix-run/react";
 import type { ColDef } from "ag-grid-community";
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import { handle as index_handle } from "app/routes/order";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "order" },
+    { title: "発注一覧" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 };
 
 export const handle = {};
 
-export default function order() {
+export default function Order() {
   // Generate 100 sample records
   const rows = Array.from({ length: 100 }, (_, i) => {
     const orderNo = `P-${String(i + 1).padStart(4, "0")}`;
@@ -172,7 +171,6 @@ export default function order() {
 
   return (
     <div>
-      <div className="py-6 text-4xl font-bold">{index_handle.title}</div>
       <div className="flex justify-between">
         <Input className="w-2xl" placeholder="検索キーワードを入力"></Input>
         <div className="flex gap-3">

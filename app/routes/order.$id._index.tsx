@@ -23,13 +23,11 @@ import {
 } from "~/components/ui/table";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useMemo, useState } from "react";
-import { handle as index_handle } from "app/routes/order.$id";
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -113,8 +111,7 @@ export default function OrderDetail() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div className="py-6 text-4xl font-bold">{index_handle.title}</div>
+      <div className="flex justify-end items-center">
         <div className="flex gap-2">
           <Button variant="destructive" size="default">
             <Trash2 className="h-4 w-4" />
