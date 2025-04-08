@@ -50,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <AvatarFallback>IN</AvatarFallback>
               </Avatar>
             </div>
-            <div className="p-3 size-full">
+            <div className="p-3">
               <AppBreadcrumb />
               {children}
             </div>
