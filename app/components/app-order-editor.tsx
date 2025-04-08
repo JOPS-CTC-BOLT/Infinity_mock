@@ -1043,6 +1043,7 @@ export default function OrderEditor() {
                 <span className="text-2xl font-medium">明細一覧</span>
                 <Button
                   onClick={() => setIsModalOpen(true)}
+                  type="button"
                   variant="outline"
                   size="sm"
                 >

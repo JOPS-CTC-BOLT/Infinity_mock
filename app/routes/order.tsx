@@ -21,7 +21,7 @@ export default function Order() {
   const matches = useMatches();
 
   return (
-    <div>
+    <div className="size-full">
       <div className="py-6 text-4xl font-bold">
         {
           matches.filter((m) => !!m.handle && !!m.handle.title).at(-1)?.handle
