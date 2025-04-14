@@ -9,6 +9,7 @@ import { OrderFormFields } from "./order-form-fields";
 import { OrderSummary } from "./order-summary";
 import { OrderDetails } from "./order-details";
 import { OrderDetail } from "./types";
+import { Separator } from "../ui/separator";
 
 const FormSchema = z
   .object({
@@ -71,7 +72,9 @@ export function OrderForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="rounded-lg border p-6 space-y-4">
           <OrderFormFields form={form} />
+          <Separator />
           <OrderSummary details={details} />
+          <Separator />
           <OrderDetails details={details} setDetails={setDetails} />
         </div>
 
