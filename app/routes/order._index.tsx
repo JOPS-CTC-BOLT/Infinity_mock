@@ -1,10 +1,21 @@
 import { Input } from "~/components/ui/input";
 import type { MetaFunction } from "@remix-run/node";
-import { CalendarIcon, Filter, Loader, Pen, Search, Upload } from "lucide-react";
+import {
+  CalendarIcon,
+  Filter,
+  Loader,
+  Pen,
+  Search,
+  Upload,
+} from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { NavLink } from "@remix-run/react";
 import type { ColDef, GridReadyEvent, IDatasource } from "ag-grid-community";
-import { AllCommunityModule, ModuleRegistry, themeQuartz } from "ag-grid-community";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  themeQuartz,
+} from "ag-grid-community";
 import { AgGridReact, CustomCellRendererProps } from "ag-grid-react";
 import { useCallback, useState } from "react";
 import {
@@ -51,183 +62,126 @@ const myTheme = themeQuartz.withParams({
 export default function Order() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
   const [orderStartDate, setOrderStartDate] = useState<Date>();
   const [orderEndDate, setOrderEndDate] = useState<Date>();
-  const [orderStatuses, setOrderStatuses] = useState({
-    unordered: false,
-    pending: false,
-    ordered: false,
-  });
-  const [orderPaperStatuses, setOrderPaperStatuses] = useState({
-    unissued: false,
-    issued: false,
-  });
-
-  // Generate sample record
-  const generateRow = (index: number) => {
-    const orderNo = `P-${String(index + 1).padStart(4, "0")}`;
-    const receivedNo = `S-${String(
-      Math.floor(Math.random() * 999) + 1
-    ).padStart(3, "0")}`;
-
-    const orderTypes = ["在庫", "直送", "工事", "その他"];
-    const purchases = [
-      "ABC株式会社",
-      "XYZ商事",
-      "工業システム株式会社",
-      "テクノ産業",
-      "建設資材株式会社",
-    ];
-    const scenes = [
-      "D河川工事",
-      "市道拡張工事",
-      "橋梁補修工事",
-      "トンネル補強工事",
-      "道路舗装工事",
-    ];
-    const orderStatuses = ["未発注", "発注済", "納品済", "検収済"];
-    const orderPaperStatuses = ["未発行", "発行済", "再発行"];
-    const departments = [
-      "仙台営業所",
-      "東京支店",
-      "大阪支店",
-      "名古屋営業所",
-      "福岡営業所",
-    ];
-    const managers = [
-      "仙台一郎",
-      "東京二郎",
-      "大阪三郎",
-      "名古屋四郎",
-      "福岡五郎",
-    ];
-
-    const randomDate = (start: Date, end: Date) => {
-      return new Date(
-        start.getTime() + Math.random() * (end.getTime() - start.getTime())
-      );
-    };
-
-    const deadlineDate = randomDate(
-      new Date(2025, 3, 1),
-      new Date(2025, 11, 31)
-    );
-    const updateDate = randomDate(new Date(2025, 0, 1), new Date(2025, 2, 31));
-
-    return {
-      id: index + 1,
-      order_no: orderNo,
-      received_no: receivedNo,
-      order_type: orderTypes[Math.floor(Math.random() * orderTypes.length)],
-      purchase: purchases[Math.floor(Math.random() * purchases.length)],
-      scene: scenes[Math.floor(Math.random() * scenes.length)],
-      order_status:
-        orderStatuses[Math.floor(Math.random() * orderStatuses.length)],
-      deadline: deadlineDate.toLocaleDateString("ja-JP"),
-      deadline_type: Math.random() > 0.5 ? "希望納期" : "確定納期",
-      order_paper_status:
-        orderPaperStatuses[
-          Math.floor(Math.random() * orderPaperStatuses.length)
-        ],
-      department: departments[Math.floor(Math.random() * departments.length)],
-      manager: managers[Math.floor(Math.random() * managers.length)],
-      update_at: updateDate.toLocaleDateString("ja-JP"),
-    };
-  };
 
   const colDefs: ColDef[] = [
     {
-      field: "order_no",
-      headerName: "発注番号",
+      field: "order_status",
+      headerName: "発注ステータス",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 130,
+    },
+    {
+      field: "approval_status",
+      headerName: "承認ステータス",
+      filter: true,
+      width: 130,
+    },
+    {
+      field: "order_no",
+      headerName: "発注No",
+      filter: true,
+      width: 120,
       cellRenderer: (params: CustomCellRendererProps) => {
         return params.data ? (
-          <NavLink to={`./${params.data.id}`}>{params.value}</NavLink>
+          <NavLink
+            to={`./${params.data.id}`}
+            className="text-blue-600 hover:text-blue-800"
+          >
+            {params.value}
+          </NavLink>
         ) : (
           <Loader />
         );
       },
     },
     {
-      field: "received_no",
-      headerName: "受注番号",
+      field: "order_date",
+      headerName: "発注日",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 120,
     },
     {
-      field: "order_type",
-      headerName: "調達区分",
+      field: "supplier",
+      headerName: "仕入先",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 200,
     },
     {
-      field: "purchase",
-      headerName: "仕入先名",
+      field: "product_name",
+      headerName: "商品名",
       filter: true,
-      flex: 1.5,
-      minWidth: 160,
+      width: 200,
     },
     {
-      field: "scene",
-      headerName: "現場名",
+      field: "spec",
+      headerName: "規格",
       filter: true,
-      flex: 1.5,
-      minWidth: 160,
+      width: 150,
     },
     {
-      field: "order_status",
-      headerName: "発注ステータス",
+      field: "quantity",
+      headerName: "数量",
       filter: true,
-      flex: 1,
-      minWidth: 140,
+      width: 100,
+      cellRenderer: (params: CustomCellRendererProps) => {
+        return params.value?.toLocaleString();
+      },
     },
     {
-      field: "deadline",
-      headerName: "希望納期",
+      field: "order_unit_price",
+      headerName: "発注単価",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 120,
+      cellRenderer: (params: CustomCellRendererProps) => {
+        return params.value?.toLocaleString();
+      },
     },
     {
-      field: "deadline_type",
-      headerName: "納期指定",
+      field: "order_amount",
+      headerName: "発注金額",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 120,
+      cellRenderer: (params: CustomCellRendererProps) => {
+        return params.value?.toLocaleString();
+      },
     },
     {
-      field: "order_paper_status",
-      headerName: "発注書発行状態",
+      field: "customer",
+      headerName: "得意先",
       filter: true,
-      flex: 1,
-      minWidth: 140,
+      width: 200,
     },
     {
-      field: "department",
-      headerName: "部門",
+      field: "site",
+      headerName: "現場",
       filter: true,
-      flex: 1,
-      minWidth: 140,
+      width: 200,
     },
     {
-      field: "manager",
-      headerName: "担当者",
+      field: "received_unit_price",
+      headerName: "受注単価",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 120,
+      cellRenderer: (params: CustomCellRendererProps) => {
+        return params.value?.toLocaleString();
+      },
     },
     {
-      field: "update_at",
-      headerName: "更新日時",
+      field: "received_amount",
+      headerName: "受注金額",
       filter: true,
-      flex: 1,
-      minWidth: 120,
+      width: 120,
+      cellRenderer: (params: CustomCellRendererProps) => {
+        return params.value?.toLocaleString();
+      },
+    },
+    {
+      field: "note",
+      headerName: "備考",
+      filter: true,
+      width: 200,
     },
   ];
 
@@ -236,13 +190,248 @@ export default function Order() {
       rowCount: undefined,
       getRows: (params) => {
         // サンプルデータの生成
-        let rowData = Array.from({ length: 1000 }, (_, i) => generateRow(i));
+        let rowData = [
+          {
+            id: 1,
+            order_status: "発注入力中",
+            approval_status: "",
+            order_no: "0000415820",
+            order_date: "2025/03/14",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010020-00001 NECﾉｰﾄPC PC-VKV50FB9B21M",
+            spec: " ",
+            quantity: "5",
+            order_unit_price: "195700",
+            order_amount: "978500",
+            customer: "010001 スワテック建設",
+            site: "000003 土木部",
+            received_unit_price: "250000",
+            received_amount: "1250000",
+            note: "",
+          },
+          {
+            id: 2,
+            order_status: "発注申請中",
+            approval_status: "承認待",
+            order_no: "0000414739",
+            order_date: "2025/03/11",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010510-00002 iiyama 液晶ﾃﾞｨｽﾌﾟﾚｲ XUB2763HSU-B1",
+            spec: " ",
+            quantity: "1",
+            order_unit_price: "16853",
+            order_amount: "16853",
+            customer: "010001 スワテック建設",
+            site: "000844 蓼科高原別荘西岡邸",
+            received_unit_price: "0",
+            received_amount: "0",
+            note: "",
+          },
+          {
+            id: 3,
+            order_status: "発注承認済",
+            approval_status: "承認済",
+            order_no: "0000415501",
+            order_date: "2025/03/13",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010510-00002 iiyama 液晶ﾃﾞｨｽﾌﾟﾚｲ XUB2293HS-B4",
+            spec: " ",
+            quantity: "2",
+            order_unit_price: "16292",
+            order_amount: "32584",
+            customer: "010001 スワテック建設",
+            site: "000844 蓼科高原別荘西岡邸",
+            received_unit_price: "0",
+            received_amount: "0",
+            note: "",
+          },
+          {
+            id: 4,
+            order_status: "発注済",
+            approval_status: "",
+            order_no: "0000413523",
+            order_date: "2025/03/07",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013270040-00011 ﾊﾞｯﾌｧﾛｰﾘﾝｸｽﾃｰｼｮﾝ　LS720D0802",
+            spec: " ",
+            quantity: "1",
+            order_unit_price: "41072",
+            order_amount: "41072",
+            customer: "010041 岡谷組",
+            site: "009999 本社総務部",
+            received_unit_price: "48320",
+            received_amount: "48320",
+            note: "",
+          },
+          {
+            id: 5,
+            order_status: "仕入未",
+            approval_status: "",
+            order_no: "0000415729",
+            order_date: "2025/03/14",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010510-00002 IOﾜｲﾄﾞ液晶ﾃﾞｨｽﾌﾟﾚｲ　LCD-U431DX",
+            spec: " ",
+            quantity: "1",
+            order_unit_price: "39690",
+            order_amount: "39690",
+            customer: "010042 岡谷組 中信",
+            site: "000806 小諸義塾高校建築工事",
+            received_unit_price: "49610",
+            received_amount: "49610",
+            note: "",
+          },
+          {
+            id: 6,
+            order_status: "一部仕入済",
+            approval_status: "",
+            order_no: "0000412291",
+            order_date: "2025/03/03",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010020-00001 HPﾉｰﾄPC B10NYAT#ABJ",
+            spec: " ",
+            quantity: "10",
+            order_unit_price: "136000",
+            order_amount: "1360000",
+            customer: "010044 興和工業",
+            site: "000999 本社",
+            received_unit_price: "189000",
+            received_amount: "1890000",
+            note: "",
+          },
+          {
+            id: 7,
+            order_status: "仕入済",
+            approval_status: "",
+            order_no: "0000412297",
+            order_date: "2025/03/03",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013100010-00012 ｳｨﾙｽｿﾌﾄESET CMJ-EPA1-C11",
+            spec: " ",
+            quantity: "14",
+            order_unit_price: "4627",
+            order_amount: "64778",
+            customer: "010044 興和工業",
+            site: "000999 本社",
+            received_unit_price: "6000",
+            received_amount: "84000",
+            note: "",
+          },
+          {
+            id: 8,
+            order_status: "完了(支払済)",
+            approval_status: "",
+            order_no: "0000412632",
+            order_date: "2025/03/05",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010010-00001 ﾏｳｽｺﾝﾋﾟｭｰﾀﾃﾞｽｸﾄｯﾌﾟPC　Q5030441073",
+            spec: "SH-I5U01　＃SHI5U01B7ADAW101CEC",
+            quantity: "2",
+            order_unit_price: "153450",
+            order_amount: "306900",
+            customer: "025025 ｱｲｻﾞﾜ工業",
+            site: "000006 会社",
+            received_unit_price: "195000",
+            received_amount: "390000",
+            note: "",
+          },
+          {
+            id: 9,
+            order_status: "発注入力中",
+            approval_status: "",
+            order_no: "0000414530",
+            order_date: "2025/03/11",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013279999 ｱｯﾌﾟﾙ　AirPodsPro　MTJV3J/A",
+            spec: " ",
+            quantity: "1",
+            order_unit_price: "34336",
+            order_amount: "34336",
+            customer: "025495 木曽土建工業",
+            site: "000303 Ｒ6　夏山",
+            received_unit_price: "46800",
+            received_amount: "46800",
+            note: "",
+          },
+          {
+            id: 10,
+            order_status: "発注申請中",
+            approval_status: "承認待",
+            order_no: "0000415056",
+            order_date: "2025/03/12",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013100010-00012 ﾊｰﾄﾞｳｴｱｵﾝｻｲﾄ5年　U18HRE",
+            spec: " ",
+            quantity: "2",
+            order_unit_price: "14835",
+            order_amount: "29670",
+            customer: "025511 清信建設興業",
+            site: "000001 会社",
+            received_unit_price: "23000",
+            received_amount: "46000",
+            note: "",
+          },
+          {
+            id: 11,
+            order_status: "発注承認済",
+            approval_status: "承認済",
+            order_no: "0000412946",
+            order_date: "2025/03/06",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0026150021-00048 ｲﾝｸｶｰﾄﾘｯｼﾞ　Y　IB02YA",
+            spec: "PX-M7110F用",
+            quantity: "1",
+            order_unit_price: "7053",
+            order_amount: "7053",
+            customer: "026330 中信土木",
+            site: "000003 会社",
+            received_unit_price: "8800",
+            received_amount: "8800",
+            note: "",
+          },
+          {
+            id: 12,
+            order_status: "発注済",
+            approval_status: "",
+            order_no: "0000415633",
+            order_date: "2025/03/14",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010510-00001 JAPANNEXT55型ﾃﾞｨｽﾌﾟﾚｲ JN-V55UHD-U",
+            spec: " ",
+            quantity: "2",
+            order_unit_price: "59048",
+            order_amount: "118096",
+            customer: "026377 ﾃｨｰｼｰﾒﾝﾃﾅﾝｽ",
+            site: "000001 松本事業所",
+            received_unit_price: "80000",
+            received_amount: "160000",
+            note: "",
+          },
+          {
+            id: 13,
+            order_status: "仕入未",
+            approval_status: "",
+            order_no: "0000413067",
+            order_date: "2025/03/06",
+            supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
+            product_name: "0013010020-00001 NECﾉｰﾄPC　PC-VKV47FB7J79L",
+            spec: " ",
+            quantity: "1",
+            order_unit_price: "195700",
+            order_amount: "195700",
+            customer: "027001 桝匠",
+            site: "000999 株式会社WorkSpirit",
+            received_unit_price: "220000",
+            received_amount: "220000",
+            note: "",
+          },
+        ];
 
         // ソート処理
         if (params.sortModel && params.sortModel.length > 0) {
           const { colId, sort } = params.sortModel[0];
           rowData.sort((a: any, b: any) => {
-            if (sort === 'asc') {
+            if (sort === "asc") {
               return a[colId] > b[colId] ? 1 : -1;
             }
             return a[colId] < b[colId] ? 1 : -1;
@@ -253,10 +442,13 @@ export default function Order() {
         if (params.filterModel) {
           Object.keys(params.filterModel).forEach((key) => {
             const filter = params.filterModel[key];
-            if (filter.type === 'contains') {
-              rowData = rowData.filter((row: any) => 
-                row[key].toString().toLowerCase().includes(filter.filter.toLowerCase())
-          );
+            if (filter.type === "contains") {
+              rowData = rowData.filter((row: any) =>
+                row[key]
+                  .toString()
+                  .toLowerCase()
+                  .includes(filter.filter.toLowerCase())
+              );
             }
           });
         }
@@ -282,15 +474,18 @@ export default function Order() {
           <div className="relative flex">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input className="w-96 pl-9 rounded-r-none" placeholder="検索キーワードを入力" />
+              <Input
+                className="w-96 pl-9 rounded-r-none"
+                placeholder="検索キーワードを入力"
+              />
             </div>
             <Button
               variant="outline"
               className="px-3 rounded-l-none border-l-0"
               onClick={() => setIsFilterOpen(true)}
             >
-                <Filter className="h-4 w-4" />
-              </Button>
+              <Filter className="h-4 w-4" />
+            </Button>
           </div>
         </div>
         <div className="flex gap-3">
@@ -329,6 +524,9 @@ export default function Order() {
             headerHeight={40}
             floatingFiltersHeight={40}
             theme={myTheme}
+            autoSizeStrategy={{
+              type: "fitCellContents",
+            }}
           />
         </div>
       </div>
@@ -358,8 +556,8 @@ export default function Order() {
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">入力担当者</div>
-                  <Input />
-                </div>
+              <Input />
+            </div>
 
             <div className="grid grid-cols-[120px_1fr] items-start gap-2">
               <div className="font-medium">発注ステータス</div>
@@ -428,98 +626,98 @@ export default function Order() {
               <div className="flex items-center gap-2">
                 <Input />
                 <span>～</span>
-                  <Input />
-                </div>
+                <Input />
+              </div>
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">発注日</div>
               <div className="flex items-center gap-2">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
                         "w-[200px] justify-start text-left font-normal",
                         !orderStartDate && "text-muted-foreground"
-                          )}
-                        >
+                      )}
+                    >
                       {orderStartDate ? (
                         format(orderStartDate, "yyyy/MM/dd")
-                          ) : (
-                            <span>開始日を選択</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
+                      ) : (
+                        <span>開始日を選択</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
                       selected={orderStartDate}
                       onSelect={setOrderStartDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <span>～</span>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
                         "w-[200px] justify-start text-left font-normal",
                         !orderEndDate && "text-muted-foreground"
-                          )}
-                        >
+                      )}
+                    >
                       {orderEndDate ? (
                         format(orderEndDate, "yyyy/MM/dd")
-                          ) : (
-                            <span>終了日を選択</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
+                      ) : (
+                        <span>終了日を選択</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
                       selected={orderEndDate}
                       onSelect={setOrderEndDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                </div>
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">仕入先</div>
               <Input />
-                    </div>
+            </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">商品名</div>
               <Input />
-                    </div>
+            </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">得意先</div>
               <Input />
-                    </div>
+            </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">現場</div>
               <Input />
-                  </div>
+            </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">備考</div>
               <Input />
-                </div>
-                    </div>
+            </div>
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsFilterOpen(false)}>
               クリア
-          </Button>
+            </Button>
             <Button onClick={() => setIsFilterOpen(false)}>検索</Button>
           </DialogFooter>
         </DialogContent>
@@ -584,7 +782,10 @@ export default function Order() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsExportModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsExportModalOpen(false)}
+            >
               戻る
             </Button>
             <Button onClick={() => setIsExportModalOpen(false)}>出力</Button>
