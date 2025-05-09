@@ -42,7 +42,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <main className="w-full">
             <div className="flex justify-between px-5 py-3 border-b">
               <div className="flex gap-4">
-                <SidebarTrigger className="cursor-pointer" />
                 <div>Sales Management System INFINITY</div>
               </div>
               <Avatar>
