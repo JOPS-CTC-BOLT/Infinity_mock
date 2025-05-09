@@ -23,7 +23,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap",
   },
 ];
 
@@ -40,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <SidebarProvider>
           <AppSidebar />
           <main className="w-full">
-            <div className="flex justify-between pr-5 py-3 border-b">
+            <div className="flex justify-between px-5 py-3 border-b">
               <div className="flex gap-4">
                 <SidebarTrigger className="cursor-pointer" />
                 <div>Sales Management System INFINITY</div>

@@ -4,7 +4,7 @@ import { CalendarIcon, Filter, Loader, Pen, Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { NavLink } from "@remix-run/react";
 import type { ColDef, GridReadyEvent, IDatasource } from "ag-grid-community";
-import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import { AllCommunityModule, ModuleRegistry, themeQuartz } from "ag-grid-community";
 import { AgGridReact, CustomCellRendererProps } from "ag-grid-react";
 import { useCallback, useState } from "react";
 import {
@@ -43,6 +43,10 @@ export const meta: MetaFunction = () => {
 export const handle = {};
 
 const PAGE_SIZE = 100;
+
+const myTheme = themeQuartz.withParams({
+  fontFamily: "Anonymous Pro",
+});
 
 export default function Order() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
