@@ -5,75 +5,36 @@ export interface OrderDetailSummaryProps {
 }
 
 export function OrderDetailSummary({ details }: OrderDetailSummaryProps) {
+  const totalOrderAmount = details.reduce((sum, detail) => sum + detail.orderAmount, 0);
+  const totalReceivedAmount = details.reduce((sum, detail) => sum + detail.receivedAmount, 0);
+  const totalProfitAmount = details.reduce((sum, detail) => sum + detail.profitAmount, 0);
+  const profitRate = totalOrderAmount > 0 ? (totalProfitAmount / totalOrderAmount * 100) : 0;
+
   return (
-    <div className="grid grid-cols-9 gap-4">
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">数量計</div>
-        <div className="text-sm">
-          {details
-            .reduce((sum, detail) => sum + detail.quantity, 0)
-            .toLocaleString()}
+    <div className="grid grid-cols-7 gap-4">
+      <div className="">
+        <div className="text-sm font-medium mb-2">発注金額計</div>
+        <div className="text-sm text-right border-b">
+          {totalOrderAmount.toLocaleString()}
+      </div>
         </div>
+      <div className="">
+        <div className="text-sm font-medium mb-2">受注金額計</div>
+        <div className="text-sm text-right border-b">
+          {totalReceivedAmount.toLocaleString()}
       </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">容重量系</div>
-        <div className="text-sm">0</div>
       </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">小売金額計</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">原価金額計</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
+      <div className="">
         <div className="text-sm font-medium mb-2">粗利金額計</div>
-        <div className="text-sm">
-          {details
-            .reduce((sum, detail) => sum + detail.profitAmount, 0)
-            .toLocaleString()}
+        <div className="text-sm text-right border-b">
+          {totalProfitAmount.toLocaleString()}
         </div>
       </div>
-      <div className="border rounded p-2">
+      <div className="">
         <div className="text-sm font-medium mb-2">粗利率</div>
-        <div className="text-sm">0</div>
+        <div className="text-sm text-right border-b">
+          {profitRate.toFixed(1)}%
       </div>
-      <div className="border rounded p-2 col-start-1">
-        <div className="text-sm font-medium mb-2">小売金額</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">粗利金額</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">粗利率</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">発注金額</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">消費税等</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">発注伝票合計</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">受注金額</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">消費税等</div>
-        <div className="text-sm">0</div>
-      </div>
-      <div className="border rounded p-2">
-        <div className="text-sm font-medium mb-2">受注伝票合計</div>
-        <div className="text-sm">0</div>
       </div>
     </div>
   );

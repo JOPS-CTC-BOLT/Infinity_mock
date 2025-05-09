@@ -47,7 +47,7 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
       <div className="grid grid-cols-7 gap-4">
         <div className="space-y-2">
           <div className="text-sm font-medium">発注No.</div>
-          <div></div>
+          <div>{form.getValues()['purchaseOrderNo']}</div>
         </div>
 
         <div className="space-y-2">
