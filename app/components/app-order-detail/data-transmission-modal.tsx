@@ -90,23 +90,15 @@ export function DataTransmissionModal({
                     <TableHead>
                       <Checkbox />
                     </TableHead>
-                    <TableHead>区分</TableHead>
-                    <TableHead>商品番号</TableHead>
                     <TableHead>商品名</TableHead>
                     <TableHead>規格</TableHead>
-                    <TableHead>在庫確認</TableHead>
                     <TableHead>発注数</TableHead>
                     <TableHead>単位</TableHead>
-                    <TableHead>単価履歴</TableHead>
                     <TableHead className="text-right">発注単価</TableHead>
                     <TableHead className="text-right">発注金額</TableHead>
-                    <TableHead className="text-right">消費税</TableHead>
                     <TableHead className="text-right">受注単価</TableHead>
                     <TableHead className="text-right">受注金額</TableHead>
-                    <TableHead className="text-right">消費税</TableHead>
                     <TableHead className="text-right">粗利金額</TableHead>
-                    <TableHead>倉庫番号</TableHead>
-                    <TableHead>倉庫名</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -115,22 +107,14 @@ export function DataTransmissionModal({
                       <TableCell>
                         <Checkbox />
                       </TableCell>
-                      <TableCell>通常</TableCell>
-                      <TableCell>{detail.productCode}</TableCell>
                       <TableCell>{detail.productName}</TableCell>
                       <TableCell>{detail.spec}</TableCell>
-                      <TableCell>{detail.stock}</TableCell>
                       <TableCell>{detail.quantity}</TableCell>
-                      <TableCell>{detail.unit}</TableCell>
-                      <TableCell>-</TableCell>
                       <TableCell className="text-right">
                         {detail.unitPrice.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-right">
                         {detail.orderAmount.toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {detail.tax.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-right">
                         {detail.receivedUnitPrice.toLocaleString()}
@@ -139,13 +123,8 @@ export function DataTransmissionModal({
                         {detail.receivedAmount.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-right">
-                        {detail.receivedTax.toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-right">
                         {detail.profitAmount.toLocaleString()}
                       </TableCell>
-                      <TableCell>{detail.warehouseCode}</TableCell>
-                      <TableCell>{detail.warehouseName}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

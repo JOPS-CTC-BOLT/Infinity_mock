@@ -22,14 +22,12 @@ import {
 import { toast } from "sonner";
 
 export interface OrderDetailHeaderProps {
-  onDelete: () => void;
   onApproval: () => void;
   onDataTransmission: () => void;
   onExport: () => void;
 }
 
 export function OrderDetailHeader({
-  onDelete,
   onApproval,
   onDataTransmission,
   onExport,
@@ -37,10 +35,31 @@ export function OrderDetailHeader({
   return (
     <div className="flex justify-end items-center">
       <div className="flex gap-2">
-        <Button variant="destructive" size="default" onClick={onDelete}>
-          <Trash2 className="h-4 w-4" />
-          削除
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="default">
+              <Trash2 className="h-4 w-4" />
+              削除
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-center">
+                発注を削除しますか？
+              </AlertDialogTitle>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>閉じる</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  toast("削除しました");
+                }}
+              >
+                削除
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <Button variant="outline" size="default" asChild>
           <NavLink to="../">
             <ArrowLeft className="h-4 w-4" />

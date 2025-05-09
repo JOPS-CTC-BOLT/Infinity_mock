@@ -18,33 +18,15 @@ const sampleEditData = {
 const sampleEditDetails: OrderDetail[] = [
   {
     id: "1",
-    productCode: "00130400040-00358",
-    productName: "扇島型河川監視カメラ",
-    spec: "1080p対応",
-    quantity: 2,
-    unit: "個",
-    unitPrice: 655000,
-    orderAmount: 1310000,
-    receivedUnitPrice: 800000,
-    receivedAmount: 1600000,
-    profitAmount: 290000,
-    note: "",
     selected: false,
-  },
-  {
-    id: "2",
-    productCode: "00130400040-00023",
-    productName: "SDカード 64GB",
-    spec: "Class 10",
-    quantity: 2,
-    unit: "個",
-    unitPrice: 5000,
-    orderAmount: 10000,
-    receivedUnitPrice: 6500,
-    receivedAmount: 13000,
-    profitAmount: 3000,
-    note: "",
-    selected: false,
+    productName: "0013010020-00001 NECﾉｰﾄPC PC-VKV50FB9B21M",
+    spec: "",
+    quantity: 5,
+    unitPrice: 195700,
+    orderAmount: 978500,
+    receivedUnitPrice: 250000,
+    receivedAmount: 1250000,
+    profitAmount: 271500,
   },
 ];
 
@@ -61,7 +43,9 @@ export default function OrderEditor() {
       <OrderForm
         details={details}
         setDetails={setDetails}
-        defaultValues={isEdit ? sampleEditData : undefined}
+        defaultValues={
+          isEdit ? sampleEditData : { department: "702050 松本支店" }
+        }
       />
     </div>
   );

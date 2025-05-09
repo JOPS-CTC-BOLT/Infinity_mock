@@ -10,18 +10,14 @@ export interface Product {
 
 export interface OrderDetail {
   id: string;
-  type?: string;
-  productCode: string;
+  selected: boolean;
   productName: string;
   spec: string;
-  stock: string;
   quantity: number;
-  unit: string;
   unitPrice: number;
   orderAmount: number;
   receivedUnitPrice: number;
   receivedAmount: number;
   profitAmount: number;
   note?: string;
-  selected: boolean;
 }

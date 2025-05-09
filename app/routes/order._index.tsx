@@ -71,18 +71,24 @@ export default function Order() {
       headerName: "発注ステータス",
       filter: true,
       width: 130,
+      pinned: "left",
+      cellRenderer: (params: CustomCellRendererProps) => {
+        return params.data ? params.value : <Loader />;
+      },
     },
     {
       field: "approval_status",
       headerName: "承認ステータス",
       filter: true,
       width: 130,
+      pinned: "left",
     },
     {
       field: "order_no",
       headerName: "発注No",
       filter: true,
       width: 120,
+      pinned: "left",
       cellRenderer: (params: CustomCellRendererProps) => {
         return params.data ? (
           <NavLink
@@ -92,7 +98,7 @@ export default function Order() {
             {params.value}
           </NavLink>
         ) : (
-          <Loader />
+          params.value
         );
       },
     },
@@ -101,12 +107,14 @@ export default function Order() {
       headerName: "発注日",
       filter: true,
       width: 120,
+      pinned: "left",
     },
     {
       field: "supplier",
       headerName: "仕入先",
       filter: true,
       width: 200,
+      pinned: "left",
     },
     {
       field: "product_name",
@@ -128,6 +136,7 @@ export default function Order() {
       cellRenderer: (params: CustomCellRendererProps) => {
         return params.value?.toLocaleString();
       },
+      cellStyle: { textAlign: "right" },
     },
     {
       field: "order_unit_price",
@@ -135,8 +144,12 @@ export default function Order() {
       filter: true,
       width: 120,
       cellRenderer: (params: CustomCellRendererProps) => {
-        return params.value?.toLocaleString();
+        return params.value?.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        });
       },
+      cellStyle: { textAlign: "right" },
     },
     {
       field: "order_amount",
@@ -146,6 +159,7 @@ export default function Order() {
       cellRenderer: (params: CustomCellRendererProps) => {
         return params.value?.toLocaleString();
       },
+      cellStyle: { textAlign: "right" },
     },
     {
       field: "customer",
@@ -165,8 +179,12 @@ export default function Order() {
       filter: true,
       width: 120,
       cellRenderer: (params: CustomCellRendererProps) => {
-        return params.value?.toLocaleString();
+        return params.value?.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        });
       },
+      cellStyle: { textAlign: "right" },
     },
     {
       field: "received_amount",
@@ -176,6 +194,7 @@ export default function Order() {
       cellRenderer: (params: CustomCellRendererProps) => {
         return params.value?.toLocaleString();
       },
+      cellStyle: { textAlign: "right" },
     },
     {
       field: "note",
@@ -200,13 +219,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010020-00001 NECﾉｰﾄPC PC-VKV50FB9B21M",
             spec: " ",
-            quantity: "5",
-            order_unit_price: "195700",
-            order_amount: "978500",
+            quantity: 5,
+            order_unit_price: 195700,
+            order_amount: 978500,
             customer: "010001 スワテック建設",
             site: "000003 土木部",
-            received_unit_price: "250000",
-            received_amount: "1250000",
+            received_unit_price: 250000,
+            received_amount: 1250000,
             note: "",
           },
           {
@@ -218,13 +237,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010510-00002 iiyama 液晶ﾃﾞｨｽﾌﾟﾚｲ XUB2763HSU-B1",
             spec: " ",
-            quantity: "1",
-            order_unit_price: "16853",
-            order_amount: "16853",
+            quantity: 1,
+            order_unit_price: 16853,
+            order_amount: 16853,
             customer: "010001 スワテック建設",
             site: "000844 蓼科高原別荘西岡邸",
-            received_unit_price: "0",
-            received_amount: "0",
+            received_unit_price: 0,
+            received_amount: 0,
             note: "",
           },
           {
@@ -236,13 +255,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010510-00002 iiyama 液晶ﾃﾞｨｽﾌﾟﾚｲ XUB2293HS-B4",
             spec: " ",
-            quantity: "2",
-            order_unit_price: "16292",
-            order_amount: "32584",
+            quantity: 2,
+            order_unit_price: 16292,
+            order_amount: 32584,
             customer: "010001 スワテック建設",
             site: "000844 蓼科高原別荘西岡邸",
-            received_unit_price: "0",
-            received_amount: "0",
+            received_unit_price: 0,
+            received_amount: 0,
             note: "",
           },
           {
@@ -254,13 +273,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013270040-00011 ﾊﾞｯﾌｧﾛｰﾘﾝｸｽﾃｰｼｮﾝ　LS720D0802",
             spec: " ",
-            quantity: "1",
-            order_unit_price: "41072",
-            order_amount: "41072",
+            quantity: 1,
+            order_unit_price: 41072,
+            order_amount: 41072,
             customer: "010041 岡谷組",
             site: "009999 本社総務部",
-            received_unit_price: "48320",
-            received_amount: "48320",
+            received_unit_price: 48320,
+            received_amount: 48320,
             note: "",
           },
           {
@@ -272,13 +291,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010510-00002 IOﾜｲﾄﾞ液晶ﾃﾞｨｽﾌﾟﾚｲ　LCD-U431DX",
             spec: " ",
-            quantity: "1",
-            order_unit_price: "39690",
-            order_amount: "39690",
+            quantity: 1,
+            order_unit_price: 39690,
+            order_amount: 39690,
             customer: "010042 岡谷組 中信",
             site: "000806 小諸義塾高校建築工事",
-            received_unit_price: "49610",
-            received_amount: "49610",
+            received_unit_price: 49610,
+            received_amount: 49610,
             note: "",
           },
           {
@@ -290,13 +309,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010020-00001 HPﾉｰﾄPC B10NYAT#ABJ",
             spec: " ",
-            quantity: "10",
-            order_unit_price: "136000",
-            order_amount: "1360000",
+            quantity: 10,
+            order_unit_price: 136000,
+            order_amount: 1360000,
             customer: "010044 興和工業",
             site: "000999 本社",
-            received_unit_price: "189000",
-            received_amount: "1890000",
+            received_unit_price: 189000,
+            received_amount: 1890000,
             note: "",
           },
           {
@@ -308,13 +327,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013100010-00012 ｳｨﾙｽｿﾌﾄESET CMJ-EPA1-C11",
             spec: " ",
-            quantity: "14",
-            order_unit_price: "4627",
-            order_amount: "64778",
+            quantity: 14,
+            order_unit_price: 4627,
+            order_amount: 64778,
             customer: "010044 興和工業",
             site: "000999 本社",
-            received_unit_price: "6000",
-            received_amount: "84000",
+            received_unit_price: 6000,
+            received_amount: 84000,
             note: "",
           },
           {
@@ -326,13 +345,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010010-00001 ﾏｳｽｺﾝﾋﾟｭｰﾀﾃﾞｽｸﾄｯﾌﾟPC　Q5030441073",
             spec: "SH-I5U01　＃SHI5U01B7ADAW101CEC",
-            quantity: "2",
-            order_unit_price: "153450",
-            order_amount: "306900",
+            quantity: 2,
+            order_unit_price: 153450,
+            order_amount: 306900,
             customer: "025025 ｱｲｻﾞﾜ工業",
             site: "000006 会社",
-            received_unit_price: "195000",
-            received_amount: "390000",
+            received_unit_price: 195000,
+            received_amount: 390000,
             note: "",
           },
           {
@@ -344,13 +363,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013279999 ｱｯﾌﾟﾙ　AirPodsPro　MTJV3J/A",
             spec: " ",
-            quantity: "1",
-            order_unit_price: "34336",
-            order_amount: "34336",
+            quantity: 1,
+            order_unit_price: 34336,
+            order_amount: 34336,
             customer: "025495 木曽土建工業",
             site: "000303 Ｒ6　夏山",
-            received_unit_price: "46800",
-            received_amount: "46800",
+            received_unit_price: 46800,
+            received_amount: 46800,
             note: "",
           },
           {
@@ -362,13 +381,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013100010-00012 ﾊｰﾄﾞｳｴｱｵﾝｻｲﾄ5年　U18HRE",
             spec: " ",
-            quantity: "2",
-            order_unit_price: "14835",
-            order_amount: "29670",
+            quantity: 2,
+            order_unit_price: 14835,
+            order_amount: 29670,
             customer: "025511 清信建設興業",
             site: "000001 会社",
-            received_unit_price: "23000",
-            received_amount: "46000",
+            received_unit_price: 23000,
+            received_amount: 46000,
             note: "",
           },
           {
@@ -380,13 +399,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0026150021-00048 ｲﾝｸｶｰﾄﾘｯｼﾞ　Y　IB02YA",
             spec: "PX-M7110F用",
-            quantity: "1",
-            order_unit_price: "7053",
-            order_amount: "7053",
+            quantity: 1,
+            order_unit_price: 7053,
+            order_amount: 7053,
             customer: "026330 中信土木",
             site: "000003 会社",
-            received_unit_price: "8800",
-            received_amount: "8800",
+            received_unit_price: 8800,
+            received_amount: 8800,
             note: "",
           },
           {
@@ -398,13 +417,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010510-00001 JAPANNEXT55型ﾃﾞｨｽﾌﾟﾚｲ JN-V55UHD-U",
             spec: " ",
-            quantity: "2",
-            order_unit_price: "59048",
-            order_amount: "118096",
+            quantity: 2,
+            order_unit_price: 59048,
+            order_amount: 118096,
             customer: "026377 ﾃｨｰｼｰﾒﾝﾃﾅﾝｽ",
             site: "000001 松本事業所",
-            received_unit_price: "80000",
-            received_amount: "160000",
+            received_unit_price: 80000,
+            received_amount: 160000,
             note: "",
           },
           {
@@ -416,13 +435,13 @@ export default function Order() {
             supplier: "053016 ﾀﾞｲﾜﾎﾞｳ情報ｼｽﾃﾑ㈱",
             product_name: "0013010020-00001 NECﾉｰﾄPC　PC-VKV47FB7J79L",
             spec: " ",
-            quantity: "1",
-            order_unit_price: "195700",
-            order_amount: "195700",
+            quantity: 1,
+            order_unit_price: 195700,
+            order_amount: 195700,
             customer: "027001 桝匠",
             site: "000999 株式会社WorkSpirit",
-            received_unit_price: "220000",
-            received_amount: "220000",
+            received_unit_price: 220000,
+            received_amount: 220000,
             note: "",
           },
         ];
@@ -477,6 +496,7 @@ export default function Order() {
               <Input
                 className="w-96 pl-9 rounded-r-none"
                 placeholder="検索キーワードを入力"
+                value="部門：松本支店"
               />
             </div>
             <Button
@@ -502,7 +522,7 @@ export default function Order() {
         </div>
       </div>
       <div className="flex grow">
-        <div className="w-full h-[400px]">
+        <div className="w-full h-[600px]">
           <AgGridReact
             columnDefs={colDefs}
             defaultColDef={{
@@ -539,14 +559,7 @@ export default function Order() {
           <div className="space-y-4">
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
               <div className="font-medium">部門</div>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="702050 松本支店" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="702050">702050 松本支店</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input value="702050 松本支店" />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">

@@ -11,8 +11,6 @@ body {
   }
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -85,8 +83,6 @@ body {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
@@ -94,4 +90,8 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.ag-header-cell-label {
+  justify-content: center;
 }

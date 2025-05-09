@@ -5,7 +5,6 @@ import { OrderDetailHeader } from "./order-detail-header";
 import { OrderDetailInfo } from "./order-detail-info";
 import { OrderDetailSummary } from "./order-detail-summary";
 import { OrderDetailList } from "./order-detail-list";
-import { DeleteModal } from "./delete-modal";
 import { ApprovalModal } from "./approval-modal";
 import { DataTransmissionModal } from "./data-transmission-modal";
 import {
@@ -25,115 +24,33 @@ import {
 import { Button } from "~/components/ui/button";
 import { toast } from "sonner";
 
-export interface DeleteItem {
-  id: string;
-  productCode: string;
-  productName: string;
-  spec: string;
-  quantity: number;
-  unit: string;
-  arrivalSchedule: string;
-  deliveryDate: string;
-  supplier: string;
-  salesPrice: number;
-  purchasePrice: number;
-  shippingFee: number;
-  selected: boolean;
-}
-
 export default function OrderDetailIndex() {
-  const navigate = useNavigate();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
-  const [isDataTransmissionModalOpen, setIsDataTransmissionModalOpen] = useState(false);
+  const [isDataTransmissionModalOpen, setIsDataTransmissionModalOpen] =
+    useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   // サンプルデータ
   const orderDetailsData: OrderDetail[] = [
     {
       id: "1",
-      productCode: "00130400040-00358",
-      productName: "扇島型河川監視カメラ",
-      spec: "1080p対応",
-      stock: "✓",
-      quantity: 2,
-      unit: "個",
-      unitPrice: 655000,
-      orderAmount: 1310000,
-      tax: 0,
-      receivedUnitPrice: 0,
-      receivedAmount: 0,
-      receivedTax: 0,
-      profitAmount: 0,
-      warehouseCode: "",
-      warehouseName: "",
       selected: false,
-    },
-    {
-      id: "2",
-      productCode: "00130400040-00023",
-      productName: "SDカード 64GB",
-      spec: "Class 10",
-      stock: "✓",
-      quantity: 2,
-      unit: "個",
-      unitPrice: 0,
-      orderAmount: 0,
-      tax: 0,
-      receivedUnitPrice: 0,
-      receivedAmount: 0,
-      receivedTax: 0,
-      profitAmount: 0,
-      warehouseCode: "",
-      warehouseName: "",
-      selected: false,
-    },
-  ];
-
-  const deleteItemsData: DeleteItem[] = [
-    {
-      id: "1",
-      productCode: "00130400040-00358",
-      productName: "簡易型河川監視カメラ",
-      spec: "太陽光発電仕様 無日照7日タイプ",
-      quantity: 1,
-      unit: "式",
-      arrivalSchedule: "-",
-      deliveryDate: "2025/04/01",
-      supplier: "-",
-      salesPrice: 0,
-      purchasePrice: 0,
-      shippingFee: 0,
-      selected: false,
-    },
-    {
-      id: "2",
-      productCode: "00130400040",
-      productName: "親水フィルム",
-      spec: "-",
-      quantity: 1,
-      unit: "式",
-      arrivalSchedule: "-",
-      deliveryDate: "2025/04/01",
-      supplier: "在庫",
-      salesPrice: 8000,
-      purchasePrice: 8000,
-      shippingFee: 300,
-      selected: false,
+      productName: "0013010020-00001 NECﾉｰﾄPC PC-VKV50FB9B21M",
+      spec: "",
+      quantity: 5,
+      unitPrice: 195700,
+      orderAmount: 978500,
+      receivedUnitPrice: 250000,
+      receivedAmount: 1250000,
+      profitAmount: 271500,
     },
   ];
 
   const [orderDetails, setOrderDetails] = useState(orderDetailsData);
-  const [deleteItems, setDeleteItems] = useState(deleteItemsData);
 
   const isAllChecked = useMemo(
     () => orderDetails.every((detail) => detail.selected),
     [orderDetails]
-  );
-
-  const isAllDeleteItemsChecked = useMemo(
-    () => deleteItems.every((item) => item.selected),
-    [deleteItems]
   );
 
   const handleExport = () => {
@@ -144,7 +61,6 @@ export default function OrderDetailIndex() {
   return (
     <div className="space-y-6">
       <OrderDetailHeader
-        onDelete={() => setIsDeleteModalOpen(true)}
         onApproval={() => setIsApprovalModalOpen(true)}
         onDataTransmission={() => setIsDataTransmissionModalOpen(true)}
         onExport={() => setIsExportModalOpen(true)}
@@ -158,14 +74,6 @@ export default function OrderDetailIndex() {
         details={orderDetails}
         setDetails={setOrderDetails}
         isAllChecked={isAllChecked}
-      />
-
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onOpenChange={setIsDeleteModalOpen}
-        items={deleteItems}
-        setItems={setDeleteItems}
-        isAllChecked={isAllDeleteItemsChecked}
       />
 
       <ApprovalModal
@@ -238,7 +146,10 @@ export default function OrderDetailIndex() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsExportModalOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsExportModalOpen(false)}
+            >
               戻る
             </Button>
             <Button onClick={handleExport}>出力</Button>
