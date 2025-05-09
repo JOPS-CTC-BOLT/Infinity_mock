@@ -19,12 +19,9 @@ export interface OrderDetail {
   unit: string;
   unitPrice: number;
   orderAmount: number;
-  tax: number;
   receivedUnitPrice: number;
   receivedAmount: number;
-  receivedTax: number;
   profitAmount: number;
-  warehouseCode: string;
-  warehouseName: string;
+  note?: string;
   selected: boolean;
 }

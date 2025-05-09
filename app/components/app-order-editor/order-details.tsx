@@ -1,4 +1,4 @@
-import { Plus, BookOpen, SquarePen, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Table,
@@ -13,16 +13,16 @@ import { Input } from "~/components/ui/input";
 import { useState, useMemo } from "react";
 import { OrderDetail } from "./types";
 import { ProductSelectionModal } from "./product-selection-modal";
-import { StockCheckModal } from "./stock-check-modal";
-import { UnitPriceHistoryModal } from "./unit-price-history-modal";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { orderDetailTypes, units } from "./constants";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
 
 export interface OrderDetailsProps {
   details: OrderDetail[];
@@ -31,17 +31,27 @@ export interface OrderDetailsProps {
 
 export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isStockModalOpen, setIsStockModalOpen] = useState(false);
-  const [isUnitPriceHistoryModalOpen, setIsUnitPriceHistoryModalOpen] = useState(false);
-  const [selectedDetail, setSelectedDetail] = useState<OrderDetail | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [isBulkDeleteDialogOpen, setIsBulkDeleteDialogOpen] = useState(false);
 
   const isAllChecked = useMemo(
     () => details.every((detail) => detail.selected),
     [details]
   );
 
+  const hasSelectedItems = useMemo(
+    () => details.some((detail) => detail.selected),
+    [details]
+  );
+
   const removeDetail = (id: string) => {
     setDetails(details.filter((detail) => detail.id !== id));
+    setDeleteTargetId(null);
+  };
+
+  const removeSelectedDetails = () => {
+    setDetails(details.filter((detail) => !detail.selected));
+    setIsBulkDeleteDialogOpen(false);
   };
 
   const updateDetail = (id: string, field: keyof OrderDetail, value: any) => {
@@ -53,28 +63,14 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
         if (field === 'quantity' || field === 'unitPrice') {
           const orderAmount = updatedDetail.quantity * updatedDetail.unitPrice;
           updatedDetail.orderAmount = orderAmount;
-          updatedDetail.tax = Math.floor(orderAmount * 0.1);
           updatedDetail.profitAmount = updatedDetail.receivedAmount - orderAmount;
         }
         
-        // 受注単価が変更された場合、受注金額と消費税を再計算
+        // 受注単価が変更された場合、受注金額と粗利金額を再計算
         if (field === 'receivedUnitPrice') {
           const receivedAmount = updatedDetail.quantity * updatedDetail.receivedUnitPrice;
           updatedDetail.receivedAmount = receivedAmount;
-          updatedDetail.receivedTax = Math.floor(receivedAmount * 0.1);
           updatedDetail.profitAmount = receivedAmount - updatedDetail.orderAmount;
-        }
-
-        // 発注金額が変更された場合、消費税を再計算
-        if (field === 'orderAmount') {
-          updatedDetail.tax = Math.floor(value * 0.1);
-          updatedDetail.profitAmount = updatedDetail.receivedAmount - value;
-        }
-
-        // 受注金額が変更された場合、消費税と粗利金額を再計算
-        if (field === 'receivedAmount') {
-          updatedDetail.receivedTax = Math.floor(value * 0.1);
-          updatedDetail.profitAmount = value - updatedDetail.orderAmount;
         }
 
         return updatedDetail;
@@ -83,20 +79,21 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
     }));
   };
 
-  const handleStockCheck = (detail: OrderDetail) => {
-    setSelectedDetail(detail);
-    setIsStockModalOpen(true);
-  };
-
-  const handleUnitPriceHistory = (detail: OrderDetail) => {
-    setSelectedDetail(detail);
-    setIsUnitPriceHistoryModalOpen(true);
-  };
-
   return (
     <div className="pt-4 space-y-4">
       <div className="flex justify-between items-center">
         <span className="text-2xl font-medium">明細一覧</span>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setIsBulkDeleteDialogOpen(true)}
+            type="button"
+            variant="destructive"
+            size="sm"
+            disabled={!hasSelectedItems}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            一括削除
+          </Button>
         <Button
           onClick={() => setIsModalOpen(true)}
           type="button"
@@ -106,6 +103,7 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
           <Plus className="w-4 h-4 mr-2" />
           商品追加
         </Button>
+      </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -130,23 +128,15 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                     }
                   />
                 </TableHead>
-                <TableHead className="p-2 text-left font-medium">区分</TableHead>
-                <TableHead className="p-2 text-left font-medium">商品番号</TableHead>
-                <TableHead className="p-2 text-left font-medium">商品名</TableHead>
-                <TableHead className="p-2 text-left font-medium">規格</TableHead>
-                <TableHead className="p-2 text-left font-medium">在庫確認</TableHead>
-                <TableHead className="p-2 text-left font-medium">発注数</TableHead>
-                <TableHead className="p-2 text-left font-medium">単位</TableHead>
-                <TableHead className="p-2 text-left font-medium">単価履歴</TableHead>
-                <TableHead className="p-2 text-right font-medium">発注単価</TableHead>
-                <TableHead className="p-2 text-right font-medium">発注金額</TableHead>
-                <TableHead className="p-2 text-right font-medium">消費税</TableHead>
-                <TableHead className="p-2 text-right font-medium">受注単価</TableHead>
-                <TableHead className="p-2 text-right font-medium">受注金額</TableHead>
-                <TableHead className="p-2 text-right font-medium">消費税</TableHead>
-                <TableHead className="p-2 text-right font-medium">粗利金額</TableHead>
-                <TableHead className="p-2 text-left font-medium">倉庫番号</TableHead>
-                <TableHead className="p-2 text-left font-medium">倉庫名</TableHead>
+                <TableHead className="p-2 text-center font-medium">商品名</TableHead>
+                <TableHead className="p-2 text-center font-medium">規格</TableHead>
+                <TableHead className="p-2 text-center font-medium">数量</TableHead>
+                <TableHead className="p-2 text-center font-medium">発注単価</TableHead>
+                <TableHead className="p-2 text-center font-medium">発注金額</TableHead>
+                <TableHead className="p-2 text-center font-medium">受注単価</TableHead>
+                <TableHead className="p-2 text-center font-medium">受注金額</TableHead>
+                <TableHead className="p-2 text-center font-medium">粗利金額</TableHead>
+                <TableHead className="p-2 text-center font-medium">備考</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
@@ -168,29 +158,6 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Select
-                      value={detail.type || "通常"}
-                      onValueChange={(value) => updateDetail(detail.id, 'type', value)}
-                    >
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {orderDetailTypes.map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Input 
-                      value={detail.productCode}
-                      onChange={(e) => updateDetail(detail.id, 'productCode', e.target.value)}
-                    />
-                  </TableCell>
-                  <TableCell className="p-2">
                     <Input 
                       value={detail.productName}
                       onChange={(e) => updateDetail(detail.id, 'productName', e.target.value)}
@@ -203,48 +170,11 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      type="button"
-                      onClick={() => handleStockCheck(detail)}
-                    >
-                      <BookOpen className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                  <TableCell className="p-2">
                     <Input 
                       type="number"
                       value={detail.quantity}
                       onChange={(e) => updateDetail(detail.id, 'quantity', Number(e.target.value))}
                     />
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Select
-                      value={detail.unit}
-                      onValueChange={(value) => updateDetail(detail.id, 'unit', value)}
-                    >
-                      <SelectTrigger className="w-[100px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {units.map((unit) => (
-                          <SelectItem key={unit} value={unit}>
-                            {unit}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      type="button"
-                      onClick={() => handleUnitPriceHistory(detail)}
-                    >
-                      <SquarePen className="h-4 w-4" />
-                    </Button>
                   </TableCell>
                   <TableCell className="p-2">
                     <Input 
@@ -259,14 +189,6 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                       type="number"
                       value={detail.orderAmount}
                       onChange={(e) => updateDetail(detail.id, 'orderAmount', Number(e.target.value))}
-                      className="text-right"
-                    />
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Input 
-                      type="number"
-                      value={detail.tax}
-                      onChange={(e) => updateDetail(detail.id, 'tax', Number(e.target.value))}
                       className="text-right"
                     />
                   </TableCell>
@@ -289,14 +211,6 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                   <TableCell className="p-2">
                     <Input 
                       type="number"
-                      value={detail.receivedTax}
-                      onChange={(e) => updateDetail(detail.id, 'receivedTax', Number(e.target.value))}
-                      className="text-right"
-                    />
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Input 
-                      type="number"
                       value={detail.profitAmount}
                       onChange={(e) => updateDetail(detail.id, 'profitAmount', Number(e.target.value))}
                       className="text-right"
@@ -304,21 +218,16 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                   </TableCell>
                   <TableCell className="p-2">
                     <Input 
-                      value={detail.warehouseCode}
-                      onChange={(e) => updateDetail(detail.id, 'warehouseCode', e.target.value)}
-                    />
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Input 
-                      value={detail.warehouseName}
-                      onChange={(e) => updateDetail(detail.id, 'warehouseName', e.target.value)}
+                      value={detail.note || ''}
+                      onChange={(e) => updateDetail(detail.id, 'note', e.target.value)}
                     />
                   </TableCell>
                   <TableCell className="p-2">
                     <Button
+                      type="button"
                       variant="destructive"
                       size="icon"
-                      onClick={() => removeDetail(detail.id)}
+                      onClick={() => setDeleteTargetId(detail.id)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -337,23 +246,41 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
         setDetails={setDetails}
       />
 
-      {selectedDetail && (
-        <>
-          <StockCheckModal
-            isOpen={isStockModalOpen}
-            onOpenChange={setIsStockModalOpen}
-            productCode={selectedDetail.productCode}
-            productName={selectedDetail.productName}
-          />
-          <UnitPriceHistoryModal
-            isOpen={isUnitPriceHistoryModalOpen}
-            onOpenChange={setIsUnitPriceHistoryModalOpen}
-            productCode={selectedDetail.productCode}
-            productName={selectedDetail.productName}
-            spec={selectedDetail.spec}
-          />
-        </>
-      )}
+      <AlertDialog open={!!deleteTargetId} onOpenChange={() => setDeleteTargetId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>明細を削除しますか？</AlertDialogTitle>
+            <AlertDialogDescription>
+              この操作は取り消せません。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>キャンセル</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteTargetId && removeDetail(deleteTargetId)}
+            >
+              削除
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isBulkDeleteDialogOpen} onOpenChange={setIsBulkDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>選択した明細を削除しますか？</AlertDialogTitle>
+            <AlertDialogDescription>
+              この操作は取り消せません。
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>キャンセル</AlertDialogCancel>
+            <AlertDialogAction onClick={removeSelectedDetails}>
+              削除
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
