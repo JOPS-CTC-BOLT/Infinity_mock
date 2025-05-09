@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input";
 import type { MetaFunction } from "@remix-run/node";
-import { CalendarIcon, Filter, Loader, Pen, Upload } from "lucide-react";
+import { CalendarIcon, Filter, Loader, Pen, Search, Upload } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { NavLink } from "@remix-run/react";
 import type { ColDef, GridReadyEvent, IDatasource } from "ag-grid-community";
@@ -53,6 +53,8 @@ export default function Order() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
+  const [orderStartDate, setOrderStartDate] = useState<Date>();
+  const [orderEndDate, setOrderEndDate] = useState<Date>();
   const [orderStatuses, setOrderStatuses] = useState({
     unordered: false,
     pending: false,
@@ -276,171 +278,20 @@ export default function Order() {
   return (
     <div className="flex flex-col">
       <div className="flex justify-between mb-6">
-        <div className="flex gap-2">
-          <Input className="w-96" placeholder="検索キーワードを入力"></Input>
-          <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="px-3">
+        <div className="flex">
+          <div className="relative flex">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input className="w-96 pl-9 rounded-r-none" placeholder="検索キーワードを入力" />
+            </div>
+            <Button
+              variant="outline"
+              className="px-3 rounded-l-none border-l-0"
+              onClick={() => setIsFilterOpen(true)}
+            >
                 <Filter className="h-4 w-4" />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-96">
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">含む</h4>
-                  <Input />
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">含まない</h4>
-                  <Input />
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">期間</h4>
-                  <div className="flex gap-2">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !startDate && "text-muted-foreground"
-                          )}
-                        >
-                          {startDate ? (
-                            format(startDate, "yyyy/MM/dd")
-                          ) : (
-                            <span>開始日を選択</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={startDate}
-                          onSelect={setStartDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <span>~</span>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !endDate && "text-muted-foreground"
-                          )}
-                        >
-                          {endDate ? (
-                            format(endDate, "yyyy/MM/dd")
-                          ) : (
-                            <span>終了日を選択</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={endDate}
-                          onSelect={setEndDate}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">発注ステータス</h4>
-                  <div className="flex gap-4">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="unordered"
-                        checked={orderStatuses.unordered}
-                        onCheckedChange={(checked) =>
-                          setOrderStatuses({ ...orderStatuses, unordered: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="unordered"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        未発注
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="pending"
-                        checked={orderStatuses.pending}
-                        onCheckedChange={(checked) =>
-                          setOrderStatuses({ ...orderStatuses, pending: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="pending"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        承認待ち
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="ordered"
-                        checked={orderStatuses.ordered}
-                        onCheckedChange={(checked) =>
-                          setOrderStatuses({ ...orderStatuses, ordered: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="ordered"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        発注済
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-medium leading-none">発注書発行状態</h4>
-                  <div className="flex gap-4">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="unissued"
-                        checked={orderPaperStatuses.unissued}
-                        onCheckedChange={(checked) =>
-                          setOrderPaperStatuses({ ...orderPaperStatuses, unissued: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="unissued"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        未発行
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="issued"
-                        checked={orderPaperStatuses.issued}
-                        onCheckedChange={(checked) =>
-                          setOrderPaperStatuses({ ...orderPaperStatuses, issued: checked as boolean })
-                        }
-                      />
-                      <label
-                        htmlFor="issued"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        発行済
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <Button>検索</Button>
-              </div>
-            </PopoverContent>
-          </Popover>
+          </div>
         </div>
         <div className="flex gap-3">
           <Button onClick={() => setIsExportModalOpen(true)}>
@@ -477,9 +328,202 @@ export default function Order() {
             rowHeight={40}
             headerHeight={40}
             floatingFiltersHeight={40}
+            theme={myTheme}
           />
         </div>
       </div>
+
+      <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>検索条件</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">部門</div>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="702050 松本支店" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="702050">702050 松本支店</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">営業担当者</div>
+              <Input />
+            </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">入力担当者</div>
+                  <Input />
+                </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-start gap-2">
+              <div className="font-medium">発注ステータス</div>
+              <div className="grid grid-cols-4 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="unordered" />
+                  <label htmlFor="unordered">発注入力中</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="ordered" />
+                  <label htmlFor="ordered">発注済</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="pending" />
+                  <label htmlFor="pending">発注申請中</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="approved" />
+                  <label htmlFor="approved">発注承認済</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="received" />
+                  <label htmlFor="received">仕入済</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="partial" />
+                  <label htmlFor="partial">一部仕入済</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="completed" />
+                  <label htmlFor="completed">完了(支払済)</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-start gap-2">
+              <div className="font-medium">承認ステータス</div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="pending-approval" />
+                  <label htmlFor="pending-approval">承認待</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="approved-status" />
+                  <label htmlFor="approved-status">承認済</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-start gap-2">
+              <div className="font-medium">仕入形態</div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="purchase" />
+                  <label htmlFor="purchase">取次</label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="sale" />
+                  <label htmlFor="sale">販売</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">発注No</div>
+              <div className="flex items-center gap-2">
+                <Input />
+                <span>～</span>
+                  <Input />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">発注日</div>
+              <div className="flex items-center gap-2">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                        "w-[200px] justify-start text-left font-normal",
+                        !orderStartDate && "text-muted-foreground"
+                          )}
+                        >
+                      {orderStartDate ? (
+                        format(orderStartDate, "yyyy/MM/dd")
+                          ) : (
+                            <span>開始日を選択</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                      selected={orderStartDate}
+                      onSelect={setOrderStartDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                <span>～</span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                        "w-[200px] justify-start text-left font-normal",
+                        !orderEndDate && "text-muted-foreground"
+                          )}
+                        >
+                      {orderEndDate ? (
+                        format(orderEndDate, "yyyy/MM/dd")
+                          ) : (
+                            <span>終了日を選択</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                      selected={orderEndDate}
+                      onSelect={setOrderEndDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">仕入先</div>
+              <Input />
+                    </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">商品名</div>
+              <Input />
+                    </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">得意先</div>
+              <Input />
+                    </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">現場</div>
+              <Input />
+                  </div>
+
+            <div className="grid grid-cols-[120px_1fr] items-center gap-2">
+              <div className="font-medium">備考</div>
+              <Input />
+                </div>
+                    </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsFilterOpen(false)}>
+              クリア
+          </Button>
+            <Button onClick={() => setIsFilterOpen(false)}>検索</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isExportModalOpen} onOpenChange={setIsExportModalOpen}>
         <DialogContent>
@@ -540,10 +584,7 @@ export default function Order() {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsExportModalOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsExportModalOpen(false)}>
               戻る
             </Button>
             <Button onClick={() => setIsExportModalOpen(false)}>出力</Button>
