@@ -40,27 +40,25 @@ export function OrderDetailList({
                   }
                 />
               </TableHead>
-              <TableHead className="p-2 text-left font-medium">
-                商品名
-              </TableHead>
-              <TableHead className="p-2 text-left font-medium">規格</TableHead>
-              <TableHead className="p-2 text-left font-medium">数量</TableHead>
-              <TableHead className="p-2 text-right font-medium">
+              <TableHead className="p-2 text-left font-bold">商品名</TableHead>
+              <TableHead className="p-2 text-left font-bold">規格</TableHead>
+              <TableHead className="p-2 text-left font-bold">数量</TableHead>
+              <TableHead className="p-2 text-right font-bold">
                 発注単価
               </TableHead>
-              <TableHead className="p-2 text-right font-medium">
+              <TableHead className="p-2 text-right font-bold">
                 発注金額
               </TableHead>
-              <TableHead className="p-2 text-right font-medium">
+              <TableHead className="p-2 text-right font-bold">
                 受注単価
               </TableHead>
-              <TableHead className="p-2 text-right font-medium">
+              <TableHead className="p-2 text-right font-bold">
                 受注金額
               </TableHead>
-              <TableHead className="p-2 text-right font-medium">
+              <TableHead className="p-2 text-right font-bold">
                 粗利金額
               </TableHead>
-              <TableHead className="p-2 text-left font-medium">備考</TableHead>
+              <TableHead className="p-2 text-left font-bold">備考</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

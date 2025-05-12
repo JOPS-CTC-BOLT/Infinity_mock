@@ -55,28 +55,34 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
   };
 
   const updateDetail = (id: string, field: keyof OrderDetail, value: any) => {
-    setDetails(details.map(detail => {
-      if (detail.id === id) {
-        const updatedDetail = { ...detail, [field]: value };
-        
-        // 数量または単価が変更された場合、関連する金額を再計算
-        if (field === 'quantity' || field === 'unitPrice') {
-          const orderAmount = updatedDetail.quantity * updatedDetail.unitPrice;
-          updatedDetail.orderAmount = orderAmount;
-          updatedDetail.profitAmount = updatedDetail.receivedAmount - orderAmount;
-        }
-        
-        // 受注単価が変更された場合、受注金額と粗利金額を再計算
-        if (field === 'receivedUnitPrice') {
-          const receivedAmount = updatedDetail.quantity * updatedDetail.receivedUnitPrice;
-          updatedDetail.receivedAmount = receivedAmount;
-          updatedDetail.profitAmount = receivedAmount - updatedDetail.orderAmount;
-        }
+    setDetails(
+      details.map((detail) => {
+        if (detail.id === id) {
+          const updatedDetail = { ...detail, [field]: value };
 
-        return updatedDetail;
-      }
-      return detail;
-    }));
+          // 数量または単価が変更された場合、関連する金額を再計算
+          if (field === "quantity" || field === "unitPrice") {
+            const orderAmount =
+              updatedDetail.quantity * updatedDetail.unitPrice;
+            updatedDetail.orderAmount = orderAmount;
+            updatedDetail.profitAmount =
+              updatedDetail.receivedAmount - orderAmount;
+          }
+
+          // 受注単価が変更された場合、受注金額と粗利金額を再計算
+          if (field === "receivedUnitPrice") {
+            const receivedAmount =
+              updatedDetail.quantity * updatedDetail.receivedUnitPrice;
+            updatedDetail.receivedAmount = receivedAmount;
+            updatedDetail.profitAmount =
+              receivedAmount - updatedDetail.orderAmount;
+          }
+
+          return updatedDetail;
+        }
+        return detail;
+      })
+    );
   };
 
   return (
@@ -94,16 +100,16 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
             <Trash2 className="w-4 h-4 mr-2" />
             一括削除
           </Button>
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          type="button"
-          variant="outline"
-          size="sm"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          商品追加
-        </Button>
-      </div>
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            type="button"
+            variant="outline"
+            size="sm"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            商品追加
+          </Button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -128,15 +134,33 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                     }
                   />
                 </TableHead>
-                <TableHead className="p-2 text-center font-medium">商品名</TableHead>
-                <TableHead className="p-2 text-center font-medium">規格</TableHead>
-                <TableHead className="p-2 text-center font-medium">数量</TableHead>
-                <TableHead className="p-2 text-center font-medium">発注単価</TableHead>
-                <TableHead className="p-2 text-center font-medium">発注金額</TableHead>
-                <TableHead className="p-2 text-center font-medium">受注単価</TableHead>
-                <TableHead className="p-2 text-center font-medium">受注金額</TableHead>
-                <TableHead className="p-2 text-center font-medium">粗利金額</TableHead>
-                <TableHead className="p-2 text-center font-medium">備考</TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  商品名
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  規格
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  数量
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  発注単価
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  発注金額
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  受注単価
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  受注金額
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  粗利金額
+                </TableHead>
+                <TableHead className="p-2 text-center font-bold">
+                  備考
+                </TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
@@ -158,68 +182,110 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       value={detail.productName}
-                      onChange={(e) => updateDetail(detail.id, 'productName', e.target.value)}
+                      onChange={(e) =>
+                        updateDetail(detail.id, "productName", e.target.value)
+                      }
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       value={detail.spec}
-                      onChange={(e) => updateDetail(detail.id, 'spec', e.target.value)}
+                      onChange={(e) =>
+                        updateDetail(detail.id, "spec", e.target.value)
+                      }
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       type="number"
                       value={detail.quantity}
-                      onChange={(e) => updateDetail(detail.id, 'quantity', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateDetail(
+                          detail.id,
+                          "quantity",
+                          Number(e.target.value)
+                        )
+                      }
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       type="number"
                       value={detail.unitPrice}
-                      onChange={(e) => updateDetail(detail.id, 'unitPrice', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateDetail(
+                          detail.id,
+                          "unitPrice",
+                          Number(e.target.value)
+                        )
+                      }
                       className="text-right"
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       type="number"
                       value={detail.orderAmount}
-                      onChange={(e) => updateDetail(detail.id, 'orderAmount', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateDetail(
+                          detail.id,
+                          "orderAmount",
+                          Number(e.target.value)
+                        )
+                      }
                       className="text-right"
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       type="number"
                       value={detail.receivedUnitPrice}
-                      onChange={(e) => updateDetail(detail.id, 'receivedUnitPrice', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateDetail(
+                          detail.id,
+                          "receivedUnitPrice",
+                          Number(e.target.value)
+                        )
+                      }
                       className="text-right"
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       type="number"
                       value={detail.receivedAmount}
-                      onChange={(e) => updateDetail(detail.id, 'receivedAmount', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateDetail(
+                          detail.id,
+                          "receivedAmount",
+                          Number(e.target.value)
+                        )
+                      }
                       className="text-right"
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
+                    <Input
                       type="number"
                       value={detail.profitAmount}
-                      onChange={(e) => updateDetail(detail.id, 'profitAmount', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateDetail(
+                          detail.id,
+                          "profitAmount",
+                          Number(e.target.value)
+                        )
+                      }
                       className="text-right"
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input 
-                      value={detail.note || ''}
-                      onChange={(e) => updateDetail(detail.id, 'note', e.target.value)}
+                    <Input
+                      value={detail.note || ""}
+                      onChange={(e) =>
+                        updateDetail(detail.id, "note", e.target.value)
+                      }
                     />
                   </TableCell>
                   <TableCell className="p-2">
@@ -246,7 +312,10 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
         setDetails={setDetails}
       />
 
-      <AlertDialog open={!!deleteTargetId} onOpenChange={() => setDeleteTargetId(null)}>
+      <AlertDialog
+        open={!!deleteTargetId}
+        onOpenChange={() => setDeleteTargetId(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>明細を削除しますか？</AlertDialogTitle>
@@ -265,7 +334,10 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog open={isBulkDeleteDialogOpen} onOpenChange={setIsBulkDeleteDialogOpen}>
+      <AlertDialog
+        open={isBulkDeleteDialogOpen}
+        onOpenChange={setIsBulkDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>選択した明細を削除しますか？</AlertDialogTitle>
