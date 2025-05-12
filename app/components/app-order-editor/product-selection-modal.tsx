@@ -112,13 +112,21 @@ export function ProductSelectionModal({
               <thead>
                 <tr className="border-b bg-muted/50">
                   <th className="p-2 w-16"></th>
-                  <th className="p-2 text-left">商品番号</th>
-                  <th className="p-2 text-left">商品名</th>
-                  <th className="p-2 text-left">規格</th>
-                  <th className="p-2 text-right">在庫数</th>
-                  <th className="p-2 text-left">単位</th>
-                  <th className="p-2 text-right">単価</th>
-                  <th className="p-2 text-center w-32">数量</th>
+                  <th className="p-2 text-muted-foreground text-left">
+                    商品番号
+                  </th>
+                  <th className="p-2 text-muted-foreground text-left">
+                    商品名
+                  </th>
+                  <th className="p-2 text-muted-foreground text-left">規格</th>
+                  <th className="p-2 text-muted-foreground text-right">
+                    在庫数
+                  </th>
+                  <th className="p-2 text-muted-foreground text-left">単位</th>
+                  <th className="p-2 text-muted-foreground text-right">単価</th>
+                  <th className="p-2 text-muted-foreground text-center w-32">
+                    数量
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -146,7 +154,10 @@ export function ProductSelectionModal({
                         min="1"
                         value={quantity[product.id] || ""}
                         onChange={(e) =>
-                          handleQuantityChange(product.id, Number(e.target.value))
+                          handleQuantityChange(
+                            product.id,
+                            Number(e.target.value)
+                          )
                         }
                         disabled={!selectedProducts.has(product.id)}
                       />

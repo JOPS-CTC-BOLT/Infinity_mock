@@ -46,7 +46,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <div className="grid grid-cols-7 gap-4">
         <div className="space-y-2">
-          <div className="text-sm font-bold">発注No.</div>
+          <div className="text-sm font-medium text-muted-foreground">
+            発注No.
+          </div>
           <div>{form.getValues()["purchaseOrderNo"]}</div>
         </div>
 
@@ -56,7 +58,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
             name="orderDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="font-bold">発注日</FormLabel>
+                <FormLabel className="font-medium text-muted-foreground">
+                  発注日
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -95,17 +99,23 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
         </div>
 
         <div className="space-y-2">
-          <div className="text-sm font-bold">発注ステータス</div>
+          <div className="text-sm font-medium text-muted-foreground">
+            発注ステータス
+          </div>
           <div>発注入力中</div>
         </div>
 
         <div className="space-y-2">
-          <div className="text-sm font-bold">承認ステータス</div>
+          <div className="text-sm font-medium text-muted-foreground">
+            承認ステータス
+          </div>
           <div></div>
         </div>
 
         <div className="space-y-2">
-          <div className="text-sm font-bold">入力担当者</div>
+          <div className="text-sm font-medium text-muted-foreground">
+            入力担当者
+          </div>
           <div>松本 一郎</div>
         </div>
 
@@ -128,7 +138,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
               name="department"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="font-bold">部門</FormLabel>
+                  <FormLabel className="font-medium text-muted-foreground">
+                    部門
+                  </FormLabel>
                   <Input placeholder="部門を入力" {...field} />
                   <FormMessage />
                 </FormItem>
@@ -142,7 +154,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
               name="supplier"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="font-bold">仕入先</FormLabel>
+                  <FormLabel className="font-medium text-muted-foreground">
+                    仕入先
+                  </FormLabel>
                   <Input placeholder="仕入先を入力" {...field} />
                   <FormMessage />
                 </FormItem>
@@ -156,7 +170,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
               name="purchaseType"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="font-bold">仕入形態</FormLabel>
+                  <FormLabel className="font-medium text-muted-foreground">
+                    仕入形態
+                  </FormLabel>
                   <Select {...field}>
                     <SelectTrigger>
                       <SelectValue placeholder="仕入形態を選択" />
@@ -181,7 +197,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
               name="customer"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="font-bold">得意先</FormLabel>
+                  <FormLabel className="font-medium text-muted-foreground">
+                    得意先
+                  </FormLabel>
                   <Input placeholder="得意先を入力" {...field} />
                   <FormMessage />
                 </FormItem>
@@ -195,7 +213,9 @@ export function OrderFormFields({ form }: OrderFormFieldsProps) {
               name="site"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="font-bold">現場</FormLabel>
+                  <FormLabel className="font-medium text-muted-foreground">
+                    現場
+                  </FormLabel>
                   <Input placeholder="現場を入力" {...field} />
                   <FormMessage />
                 </FormItem>

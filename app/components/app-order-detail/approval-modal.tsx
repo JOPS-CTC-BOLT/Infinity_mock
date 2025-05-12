@@ -35,11 +35,11 @@ export function ApprovalModal({ isOpen, onOpenChange }: ApprovalModalProps) {
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <div className="font-medium">発注番号：</div>
+            <div className="font-medium text-muted-foreground">発注番号：</div>
             <div>P-0101</div>
           </div>
           <div className="space-y-2">
-            <div className="font-medium">
+            <div className="font-medium text-muted-foreground">
               申請部署 <span className="text-red-500 text-sm">※必須</span>
             </div>
             <Select>
@@ -54,7 +54,7 @@ export function ApprovalModal({ isOpen, onOpenChange }: ApprovalModalProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <div className="font-medium">
+            <div className="font-medium text-muted-foreground">
               承認者 <span className="text-red-500 text-sm">※必須</span>
             </div>
             <Select>
@@ -69,7 +69,7 @@ export function ApprovalModal({ isOpen, onOpenChange }: ApprovalModalProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <div className="font-medium">コメント</div>
+            <div className="font-medium text-muted-foreground">コメント</div>
             <Textarea
               placeholder="承認よろしくお願いします。"
               className="min-h-[100px]"

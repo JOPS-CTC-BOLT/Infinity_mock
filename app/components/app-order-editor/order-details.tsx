@@ -134,31 +134,31 @@ export function OrderDetails({ details, setDetails }: OrderDetailsProps) {
                     }
                   />
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   商品名
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   規格
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   数量
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   発注単価
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   発注金額
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   受注単価
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   受注金額
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   粗利金額
                 </TableHead>
-                <TableHead className="p-2 text-center font-bold">
+                <TableHead className="p-2 text-center font-medium text-muted-foreground">
                   備考
                 </TableHead>
                 <TableHead></TableHead>

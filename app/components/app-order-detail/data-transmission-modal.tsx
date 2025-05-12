@@ -49,7 +49,7 @@ export function DataTransmissionModal({
         </DialogHeader>
         <div className="space-y-4">
           <div className="space-y-2">
-            <div className="font-medium">
+            <div className="font-medium text-muted-foreground">
               送信方法 <span className="text-red-500 text-sm">※必須</span>
             </div>
             <Select>
@@ -63,7 +63,7 @@ export function DataTransmissionModal({
           </div>
 
           <div className="space-y-2">
-            <div className="font-medium">
+            <div className="font-medium text-muted-foreground">
               送信先 <span className="text-red-500 text-sm">※必須</span>
             </div>
             <Select>
@@ -82,7 +82,7 @@ export function DataTransmissionModal({
           </div>
 
           <div className="space-y-2">
-            <div className="font-medium">送信対象</div>
+            <div className="font-medium text-muted-foreground">送信対象</div>
             <div className="border rounded-lg">
               <Table>
                 <TableHeader>

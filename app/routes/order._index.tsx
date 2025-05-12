@@ -558,22 +558,28 @@ export default function Order() {
           </DialogHeader>
           <div className="space-y-4">
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">部門</div>
+              <div className="font-medium text-muted-foreground">部門</div>
               <Input value="702050 松本支店" />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">営業担当者</div>
+              <div className="font-medium text-muted-foreground">
+                営業担当者
+              </div>
               <Input />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">入力担当者</div>
+              <div className="font-medium text-muted-foreground">
+                入力担当者
+              </div>
               <Input />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-start gap-2">
-              <div className="font-bold">発注ステータス</div>
+              <div className="font-medium text-muted-foreground">
+                発注ステータス
+              </div>
               <div className="grid grid-cols-4 gap-4">
                 <div className="flex items-center space-x-2">
                   <Checkbox id="unordered" />
@@ -607,7 +613,9 @@ export default function Order() {
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-start gap-2">
-              <div className="font-bold">承認ステータス</div>
+              <div className="font-medium text-muted-foreground">
+                承認ステータス
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
                   <Checkbox id="pending-approval" />
@@ -621,7 +629,7 @@ export default function Order() {
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-start gap-2">
-              <div className="font-bold">仕入形態</div>
+              <div className="font-medium text-muted-foreground">仕入形態</div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
                   <Checkbox id="purchase" />
@@ -635,7 +643,7 @@ export default function Order() {
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">発注No</div>
+              <div className="font-medium text-muted-foreground">発注No</div>
               <div className="flex items-center gap-2">
                 <Input />
                 <span>～</span>
@@ -644,7 +652,7 @@ export default function Order() {
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">発注日</div>
+              <div className="font-medium text-muted-foreground">発注日</div>
               <div className="flex items-center gap-2">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -703,27 +711,27 @@ export default function Order() {
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">仕入先</div>
+              <div className="font-medium text-muted-foreground">仕入先</div>
               <Input />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">商品名</div>
+              <div className="font-medium text-muted-foreground">商品名</div>
               <Input />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">得意先</div>
+              <div className="font-medium text-muted-foreground">得意先</div>
               <Input />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">現場</div>
+              <div className="font-medium text-muted-foreground">現場</div>
               <Input />
             </div>
 
             <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-              <div className="font-bold">備考</div>
+              <div className="font-medium text-muted-foreground">備考</div>
               <Input />
             </div>
           </div>
@@ -743,7 +751,7 @@ export default function Order() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <div className="font-bold">出力対象</div>
+              <div className="font-medium text-muted-foreground">出力対象</div>
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="出力対象を選択" />
@@ -756,7 +764,7 @@ export default function Order() {
             </div>
 
             <div className="space-y-2">
-              <div className="font-bold">出力様式</div>
+              <div className="font-medium text-muted-foreground">出力様式</div>
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="様式1" />
@@ -769,7 +777,7 @@ export default function Order() {
             </div>
 
             <div className="space-y-2">
-              <div className="font-bold">保存先</div>
+              <div className="font-medium text-muted-foreground">保存先</div>
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="ダウンロード" />
@@ -782,7 +790,7 @@ export default function Order() {
             </div>
 
             <div className="space-y-2">
-              <div className="font-bold">ページ</div>
+              <div className="font-medium text-muted-foreground">ページ</div>
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="すべて" />
