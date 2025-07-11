@@ -1,0 +1,158 @@
+openapi: "3.1.1"
+info:
+  title: バックエンド
+  version: "1.0"
+  description: INFINITYのバックエンドAPI
+servers:
+  - url: https://cts-infinity-idaas-api.hkr.cts-h.co.jp/
+    description: IDaaS検証サーバ
+components:
+  schemas:
+    GeneralError:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Mitsumori:
+      type: object
+      properties:
+        mitsumori_no:
+          type: string
+        mitsumori_status:
+          type: string
+        shonin_status:
+          type: string
+        mitsumori_date:
+          type: string
+          format: "2025-06-01"
+  parameters:
+    skipParam:
+      name: skip
+      in: query
+      description: number of items to skip
+      required: true
+      schema:
+        type: integer
+        format: int32
+    limitParam:
+      name: limit
+      in: query
+      description: max records to return
+      required: true
+      schema:
+        type: integer
+        format: int32
+  responses:
+    NotFound:
+      description: Entity not found.
+    IllegalInput:
+      description: Illegal input for operation.
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: Credentials or access token for API
+
+paths:
+  /mitsumori:
+    get:
+      description: 見積の一覧を取得する
+      parameters:
+        - name: bumon
+          in: query
+          description: 部門
+          example: 702050
+          schema:
+            type: string
+        - name: eigyo
+          in: query
+          description: 営業
+          example: 田中太郎
+          schema:
+            type: string
+        - name: mitsumori_status
+          in: query
+          description: 見積ステータス
+          example: [1, 2]
+          schema:
+            type: array
+        - name: mitsumori_from_date
+          in: query
+          description: 見積日（From）
+          example: "2025/06/01"
+          schema:
+            type: string
+            format: date
+        - name: mitsumori_to_date
+          in: query
+          description: 見積日（To）
+          example: "2025/06/31"
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: 見積一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Mitsumori"
+    post:
+      description: 見積を登録する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Mitsumori"
+      responses:
+        "201":
+          description: 見積作成
+  /mitsumori/{mitsumori_no}:
+    get:
+      description: 見積を取得する
+      parameters:
+        - name: mitsumori_no
+          in: path
+          description: 見積No
+          example: M-001
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 見積
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Mitsumori"
+    put:
+      description: 見積を更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Mitsumori"
+      responses:
+        "201":
+          description: 見積更新
+    delete:
+      description: 見積を削除する
+      responses:
+        "200":
+          description: 見積削除
+
+security:
+  - Bearer: []
